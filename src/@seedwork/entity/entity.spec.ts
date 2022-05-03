@@ -2,7 +2,7 @@ import UniqueEntityId from "../domain/value-objects/unique-entity-id.vo";
 import Entity from "./entity"
 import {validate as uuidValidate} from 'uuid'
 
-class StubEntity extends Entity<{prop1: string, prop2: Number}>{
+class StubEntity extends Entity<{prop1: string, prop2?: number}>{
 
 }
 
