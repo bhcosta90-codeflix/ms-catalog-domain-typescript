@@ -1,4 +1,3 @@
-import {v4 as uuid4} from 'uuid'
 import UniqueEntityId from './../../../@seedwork/domain/unique-entity-id.vo'
 
 export type CategoryType = {
