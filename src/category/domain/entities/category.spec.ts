@@ -165,4 +165,33 @@ describe("Category Test", () => {
 
     expect(category.id).toBe(uuid.value)
   })
+
+  test('Should update a category', () => {
+    const category = new Category({
+      name: "movie",
+    });
+
+    category.update('test', 'test description');
+    expect(category.name).toBe('test')
+    expect(category.description).toBe('test description')
+  })
+
+  test('Should activate a category', () => {
+    const category = new Category({
+      name: "movie",
+      active: false
+    });
+
+    category.activate();
+    expect(category.active).toBeTruthy()
+  })
+
+  test('Should deactivate a category', () => {
+    const category = new Category({
+      name: "movie",
+    });
+
+    category.deactivate();
+    expect(category.active).toBeFalsy()
+  })
 });

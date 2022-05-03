@@ -23,4 +23,14 @@ describe("Entity Unit Test", () => {
         expect(entity.uniqueEntityId).toBeInstanceOf(UniqueEntityId)
         expect(entity.id).toBe(id.value)
     })
+
+    it('Should convert entity to json', () => {
+        const arrange = {prop1: 'teste', prop2: 10};
+        const id = new UniqueEntityId()
+        const entity = new StubEntity(arrange, id);
+        expect(entity.toJSON()).toStrictEqual({
+            id: id.value,
+            ...arrange
+        })
+    })
 })
