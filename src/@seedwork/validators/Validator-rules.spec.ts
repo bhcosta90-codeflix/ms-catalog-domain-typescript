@@ -126,7 +126,7 @@ describe("ValidatorRules Unit Test", () => {
         property: item.property,
         rule,
         error: new ValidationError(
-          "The field must be less or equal than 4 characters"
+          "The field must be bigger or equal than 4 characters"
         ),
         params: [4],
       });
@@ -134,6 +134,42 @@ describe("ValidatorRules Unit Test", () => {
 
     arranges = [
       { value: "test", property: "field" },
+      { value: undefined, property: "field" },
+      { value: null, property: "field" },
+    ];
+
+    arranges.forEach(function (item: any): void {
+      assertIsValid({
+        value: item.value,
+        property: item.property,
+        rule,
+        error: new ValidationError(
+          "The field must be bigger or equal than 4 characters"
+        ),
+        params: [4],
+      });
+    });
+  });
+
+  test("Min length validation rule", () => {
+    const rule: keyof ValidatorRules = "minLength";
+
+    let arranges: Values[] = [{ value: "te", property: "field" }];
+
+    arranges.forEach(function (item: any): void {
+      assertIsInvalid({
+        value: item.value,
+        property: item.property,
+        rule,
+        error: new ValidationError(
+          "The field must be less or equal than 4 characters"
+        ),
+        params: [4],
+      });
+    });
+
+    arranges = [
+      { value: "testee", property: "field" },
       { value: undefined, property: "field" },
       { value: null, property: "field" },
     ];
@@ -164,9 +200,7 @@ describe("ValidatorRules Unit Test", () => {
         value: item.value,
         property: item.property,
         rule,
-        error: new ValidationError(
-          "The field must be a boolean"
-        ),
+        error: new ValidationError("The field must be a boolean"),
       });
     });
 
@@ -182,10 +216,52 @@ describe("ValidatorRules Unit Test", () => {
         value: item.value,
         property: item.property,
         rule,
-        error: new ValidationError(
-          "The field must be a boolean"
-        ),
+        error: new ValidationError("The field must be a boolean"),
       });
     });
+  });
+
+  it("Should throw a validation error when combine two or more validation rules", () => {
+    let validator: ValidatorRules;
+
+    validator = ValidatorRules.values(null, "field");
+    expect(() => validator.required().string()).toThrow(
+      "The field is required"
+    );
+
+    validator = ValidatorRules.values(5, "field");
+    expect(() => validator.required().string().maxLength(5)).toThrow(
+      "The field must be a string"
+    );
+
+    validator = ValidatorRules.values("aaaaaa", "field");
+    expect(() => validator.required().string().maxLength(5)).toThrow(
+      "The field must be bigger or equal than 5 characters"
+    );
+
+    validator = ValidatorRules.values(null, "field");
+    expect(() => validator.required().string()).toThrow(
+      "The field is required"
+    );
+
+    validator = ValidatorRules.values(5, "field");
+    expect(() => validator.required().string().minLength(5)).toThrow(
+      "The field must be a string"
+    );
+
+    validator = ValidatorRules.values("aaa", "field");
+    expect(() => validator.required().string().minLength(5)).toThrow(
+      "The field must be less or equal than 5 characters"
+    );
+
+    validator = ValidatorRules.values(null, "field");
+    expect(() => validator.required().boolean()).toThrow(
+      "The field is required"
+    );
+
+    validator = ValidatorRules.values(5, "field");
+    expect(() => validator.required().boolean()).toThrow(
+      "The field must be a boolean"
+    );
   });
 });
