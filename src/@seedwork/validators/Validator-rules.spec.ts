@@ -264,4 +264,15 @@ describe("ValidatorRules Unit Test", () => {
       "The field must be a boolean"
     );
   });
+
+  it("Should valid when combine two or more validation rule", () => {
+    expect.assertions(0)
+
+    ValidatorRules.values("teste", "field").required().string();
+    ValidatorRules.values("teste", "field").required().string().maxLength(5);
+    ValidatorRules.values("teste", "field").required().string().minLength(5);
+
+    ValidatorRules.values(true, "field").required().boolean();
+    ValidatorRules.values(false, "field").required().boolean();
+  })
 });
