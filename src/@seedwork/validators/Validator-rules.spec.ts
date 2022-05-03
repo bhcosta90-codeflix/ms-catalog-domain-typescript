@@ -87,8 +87,6 @@ describe("ValidatorRules Unit Test", () => {
       { value: 5, property: "field" },
       { value: {}, property: "field" },
       { value: false, property: "field" },
-      { value: null, property: "field" },
-      { value: undefined, property: "field" },
     ];
 
     arranges.forEach(function (item: any): void {
@@ -103,6 +101,8 @@ describe("ValidatorRules Unit Test", () => {
     arranges = [
       { value: "teste", property: "field" },
       { value: "", property: "field" },
+      { value: undefined, property: "field" },
+      { value: null, property: "field" },
     ];
 
     arranges.forEach(function (item: any): void {
@@ -132,7 +132,11 @@ describe("ValidatorRules Unit Test", () => {
       });
     });
 
-    arranges = [{ value: "test", property: "field" }];
+    arranges = [
+      { value: "test", property: "field" },
+      { value: undefined, property: "field" },
+      { value: null, property: "field" },
+    ];
 
     arranges.forEach(function (item: any): void {
       assertIsValid({
@@ -143,6 +147,44 @@ describe("ValidatorRules Unit Test", () => {
           "The field must be less or equal than 4 characters"
         ),
         params: [4],
+      });
+    });
+  });
+
+  test("Boolean validation rule", () => {
+    const rule: keyof ValidatorRules = "boolean";
+
+    let arranges: Values[] = [
+      { value: "teste", property: "field" },
+      { value: 5, property: "field" },
+    ];
+
+    arranges.forEach(function (item: any): void {
+      assertIsInvalid({
+        value: item.value,
+        property: item.property,
+        rule,
+        error: new ValidationError(
+          "The field must be a boolean"
+        ),
+      });
+    });
+
+    arranges = [
+      { value: undefined, property: "field" },
+      { value: null, property: "field" },
+      { value: true, property: "field" },
+      { value: false, property: "field" },
+    ];
+
+    arranges.forEach(function (item: any): void {
+      assertIsValid({
+        value: item.value,
+        property: item.property,
+        rule,
+        error: new ValidationError(
+          "The field must be a boolean"
+        ),
       });
     });
   });
