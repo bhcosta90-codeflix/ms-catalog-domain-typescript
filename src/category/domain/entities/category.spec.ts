@@ -158,11 +158,11 @@ describe("Category Test", () => {
     }, null);
     expect(category.id).not.toBeNull()
 
-    const id = new UniqueEntityId("63d38916-93d0-45c6-946d-f9da63dcfb5d")
+    const uuid = new UniqueEntityId("63d38916-93d0-45c6-946d-f9da63dcfb5d")
     category = new Category({
       name: "movie",
-    }, id);
+    }, uuid);
 
-    expect(category.id).toBe(id)
+    expect(category.id).toBe(uuid.value)
   })
 });
