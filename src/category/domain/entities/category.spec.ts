@@ -1,6 +1,6 @@
 import { Category } from "./category";
 import { omit } from "lodash";
-import {validate as uuidValidate} from 'uuid'
+import UniqueEntityId from "./../../../@seedwork/domain/unique-entity-id.vo";
 
 describe("Category Test", () => {
   test("constructor of category", () => {
@@ -152,14 +152,13 @@ describe("Category Test", () => {
       name: "movie",
     });
     expect(category.id).not.toBeNull()
-    expect(uuidValidate(category.id)).toBeTruthy()
 
     category = new Category({
       name: "movie",
     }, null);
     expect(category.id).not.toBeNull()
 
-    const id = "63d38916-93d0-45c6-946d-f9da63dcfb5d"
+    const id = new UniqueEntityId("63d38916-93d0-45c6-946d-f9da63dcfb5d")
     category = new Category({
       name: "movie",
     }, id);
