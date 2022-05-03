@@ -14,34 +14,22 @@ type ExceptedRule = {
   params?: any[];
 };
 
-function assertIsInvalid({
-  value,
-  property,
-  rule,
-  error,
-  params = [],
-}: ExceptedRule) {
+function assertIsInvalid(expected: ExceptedRule) {
   expect((): ValidatorRules => {
-    const validator: ValidatorRules = ValidatorRules.values(value, property);
-    const method = validator[rule];
-    method.apply(validator, params);
+    const validator: ValidatorRules = ValidatorRules.values(expected.value, expected.property);
+    const method = validator[expected.rule];
+    method.apply(validator, expected.params);
     return validator;
-  }).toThrow(error);
+  }).toThrow(expected.error);
 }
 
-function assertIsValid({
-  value,
-  property,
-  rule,
-  error,
-  params = [],
-}: ExceptedRule) {
+function assertIsValid(expected: ExceptedRule) {
   expect((): ValidatorRules => {
-    const validator: ValidatorRules = ValidatorRules.values(value, property);
-    const method = validator[rule];
-    method.apply(validator, params);
+    const validator: ValidatorRules = ValidatorRules.values(expected.value, expected.property);
+    const method = validator[expected.rule];
+    method.apply(validator, expected.params);
     return validator;
-  }).not.toThrow(error);
+  }).not.toThrow(expected.error);
 }
 
 describe("ValidatorRules Unit Test", () => {
