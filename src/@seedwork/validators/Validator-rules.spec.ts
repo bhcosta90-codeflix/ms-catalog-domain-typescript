@@ -31,7 +31,7 @@ function runRule({
   property,
   rule,
   params = [],
-}: ExceptedRule): ValidatorRules {
+}: Omit<ExceptedRule, "erro">): ValidatorRules {
   const validator: ValidatorRules = ValidatorRules.values(value, property);
   const method = validator[rule];
   method.apply(validator, params);
