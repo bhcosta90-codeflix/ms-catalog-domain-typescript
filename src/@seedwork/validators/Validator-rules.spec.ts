@@ -16,20 +16,26 @@ type ExceptedRule = {
 
 function assertIsInvalid(expected: ExceptedRule) {
   expect((): ValidatorRules => {
-    const validator: ValidatorRules = ValidatorRules.values(expected.value, expected.property);
-    const method = validator[expected.rule];
-    method.apply(validator, expected.params);
-    return validator;
+    return runRule(expected);
   }).toThrow(expected.error);
 }
 
 function assertIsValid(expected: ExceptedRule) {
   expect((): ValidatorRules => {
-    const validator: ValidatorRules = ValidatorRules.values(expected.value, expected.property);
-    const method = validator[expected.rule];
-    method.apply(validator, expected.params);
-    return validator;
+    return runRule(expected);
   }).not.toThrow(expected.error);
+}
+
+function runRule({
+  value,
+  property,
+  rule,
+  params = [],
+}: ExceptedRule): ValidatorRules {
+  const validator: ValidatorRules = ValidatorRules.values(value, property);
+  const method = validator[rule];
+  method.apply(validator, params);
+  return validator;
 }
 
 describe("ValidatorRules Unit Test", () => {
@@ -112,31 +118,31 @@ describe("ValidatorRules Unit Test", () => {
   test("Max length validation rule", () => {
     const rule: keyof ValidatorRules = "maxLength";
 
-    let arranges: Values[] = [
-      { value: "teste", property: "field" },
-    ];
+    let arranges: Values[] = [{ value: "teste", property: "field" }];
 
     arranges.forEach(function (item: any): void {
       assertIsInvalid({
         value: item.value,
         property: item.property,
         rule,
-        error: new ValidationError("The field must be less or equal than 4 characters"),
-        params: [4]
+        error: new ValidationError(
+          "The field must be less or equal than 4 characters"
+        ),
+        params: [4],
       });
     });
 
-    arranges = [
-        { value: "test", property: "field" },
-    ];
+    arranges = [{ value: "test", property: "field" }];
 
     arranges.forEach(function (item: any): void {
-        assertIsValid({
+      assertIsValid({
         value: item.value,
         property: item.property,
         rule,
-        error: new ValidationError("The field must be less or equal than 4 characters"),
-        params: [4]
+        error: new ValidationError(
+          "The field must be less or equal than 4 characters"
+        ),
+        params: [4],
       });
     });
   });
